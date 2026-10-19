@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>CS77 Scanner</title>
     
     <!-- Library Pihak Ketiga via CDN -->
@@ -16,68 +16,95 @@
     
     <!-- Font Awesome & Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     
     <style>
+        /* --- RESET & VARIABEL --- */
         :root {
             --primary: #0056b3;
             --secondary: #ff7f00;
-            --bg: #f4f7f6;
-            --text: #333;
+            --bg: #eef2f5;
+            --card-bg: #ffffff;
+            --text: #2c3e50;
+            --danger: #dc3545;
+            --success: #28a745;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
-        body { background: var(--bg); color: var(--text); padding-bottom: 80px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: var(--text); padding-bottom: 80px; overflow-x: hidden; }
         
-        /* Navbar */
-        .navbar { background: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
-        .logo-area { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 1.2rem; color: var(--primary); }
-        .user-info { text-align: right; font-size: 0.85rem; }
-        .user-info strong { color: var(--primary); }
+        /* --- NAVBAR --- */
+        .navbar { background: var(--card-bg); padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100; border-radius: 0 0 15px 15px; }
+        .logo-area { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 1.1rem; color: var(--primary); }
+        .user-info { display: flex; flex-direction: column; align-items: flex-end; font-size: 0.75rem; line-height: 1.2; }
+        .user-info strong { color: var(--primary); font-size: 0.85rem; }
+        .logout-btn { background: #fee2e2; color: var(--danger); border: none; padding: 4px 8px; border-radius: 5px; font-size: 0.7rem; font-weight: 600; margin-top: 4px; cursor: pointer; }
 
-        /* Login Section */
-        #login-section { height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; background: white; }
-        .login-box { width: 100%; max-width: 400px; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; }
-        .login-box h2 { color: var(--primary); margin-bottom: 20px; }
+        /* --- LOGIN SECTION --- */
+        #login-section { height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; background: var(--card-bg); }
+        .login-box { width: 100%; max-width: 400px; padding: 30px 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
+        .login-box h2 { color: var(--primary); margin-bottom: 5px; }
+        .login-box p { color: #666; font-size: 0.85rem; margin-bottom: 25px; }
         .input-group { margin-bottom: 15px; text-align: left; }
-        .input-group label { font-size: 0.9rem; font-weight: 600; }
-        .input-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; margin-top: 5px; }
+        .input-group label { font-size: 0.8rem; font-weight: 600; color: #444; }
+        .input-group input { width: 100%; padding: 12px; border: 1.5px solid #ddd; border-radius: 10px; margin-top: 5px; font-size: 0.9rem; transition: 0.2s; }
+        .input-group input:focus { border-color: var(--primary); outline: none; }
+
+        /* --- MAIN APP LAYOUT --- */
+        #app-section { display: none; padding: 15px; max-width: 600px; margin: 0 auto; }
         
-        /* Main App */
-        #app-section { display: none; padding: 15px; max-width: 800px; margin: 0 auto; }
-        
-        /* Camera & Scanner */
-        .scanner-container { background: #000; border-radius: 15px; overflow: hidden; position: relative; margin-bottom: 15px; min-height: 250px; }
+        /* --- KAMERA --- */
+        .scanner-container { background: #000; border-radius: 15px; overflow: hidden; position: relative; margin-bottom: 12px; min-height: 200px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         #reader { width: 100%; }
-        .camera-controls { display: flex; gap: 10px; margin-top: 10px; }
-        .btn { flex: 1; padding: 12px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; text-align: center; }
+        .camera-controls { display: flex; gap: 10px; margin-bottom: 20px; }
+        
+        /* --- TOMBOL UMUM --- */
+        .btn { flex: 1; padding: 12px; border: none; border-radius: 10px; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 6px; }
+        .btn:active { transform: scale(0.97); }
         .btn-primary { background: var(--primary); color: white; }
-        .btn-danger { background: #dc3545; color: white; }
+        .btn-danger { background: var(--danger); color: white; }
         .btn-warning { background: var(--secondary); color: white; }
-        .btn-success { background: #28a745; color: white; }
+        .btn-success { background: var(--success); color: white; }
+        .btn-outline { background: transparent; border: 1.5px solid var(--primary); color: var(--primary); }
 
-        /* Form Manual & Qty */
-        .manual-form { background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .manual-form h3 { font-size: 1rem; margin-bottom: 10px; color: var(--primary); }
-        .manual-form .row { display: flex; gap: 10px; margin-bottom: 10px; }
-        .manual-form .row input { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        /* --- FORM MANUAL --- */
+        .manual-form { background: var(--card-bg); padding: 15px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .manual-form h3 { font-size: 0.9rem; margin-bottom: 12px; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+        .form-row { display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
+        .form-row input { width: 100%; padding: 12px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 0.85rem; }
+        
+        /* --- LIST DATA SCAN (MOBILE FRIENDLY) --- */
+        .scan-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+        .scan-card { background: var(--card-bg); padding: 15px; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); border-left: 5px solid var(--primary); display: flex; flex-direction: column; gap: 8px; }
+        .scan-header { display: flex; justify-content: space-between; align-items: flex-start; }
+        .scan-title { font-weight: 600; font-size: 0.9rem; color: var(--text); line-height: 1.3; flex: 1; padding-right: 10px; }
+        .scan-sub { font-size: 0.75rem; color: #777; }
+        .scan-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 5px; border-top: 1px dashed #eee; padding-top: 10px; }
+        .qty-wrapper { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 600; }
+        .qty-input { width: 70px; padding: 8px; border: 1.5px solid #ddd; border-radius: 6px; text-align: center; font-size: 1rem; font-weight: 600; color: var(--primary); }
+        .btn-delete { background: #fee2e2; color: var(--danger); border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; }
 
-        /* Tabel Data */
-        .data-table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 15px; }
-        .data-table th, .data-table td { padding: 10px; text-align: left; border-bottom: 1px solid #eee; font-size: 0.85rem; }
-        .data-table th { background: var(--primary); color: white; }
-        .qty-input { width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 5px; text-align: center; }
-        .btn-delete { background: transparent; border: none; color: #dc3545; cursor: pointer; font-size: 1.1rem; }
+        /* --- EXPORT AREA --- */
+        .export-area { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+        .export-area .btn { flex: 1 1 45%; }
 
-        /* Export Buttons */
-        .export-area { display: flex; gap: 10px; margin-bottom: 20px; }
-
-        /* Footer */
-        .social-footer-container { background: white; padding: 20px; text-align: center; border-top: 1px solid #ddd; margin-top: 20px; }
-        .social-footer-bar { display: flex; justify-content: center; gap: 15px; margin-bottom: 10px; }
-        .social-icon { color: #555; font-size: 1.5rem; transition: 0.3s; position: relative; }
+        /* --- FOOTER --- */
+        .social-footer-container { background: var(--card-bg); padding: 25px 15px; text-align: center; border-radius: 15px 15px 0 0; margin-top: 20px; }
+        .social-footer-bar { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-bottom: 15px; }
+        .social-icon { color: #555; font-size: 1.4rem; transition: 0.3s; }
         .social-icon:hover { color: var(--primary); }
-        .footer-credits { font-size: 0.8rem; color: #777; line-height: 1.5; }
+        .footer-credits { font-size: 0.75rem; color: #777; line-height: 1.6; }
         .footer-credits strong { color: var(--primary); }
+        .deepseek-badge { display: inline-block; background: #eef2ff; color: #4f46e5; padding: 3px 10px; border-radius: 20px; font-size: 0.65rem; font-weight: 600; margin-top: 8px; border: 1px solid #c7d2fe; }
+
+        /* --- RESPONSIVE UNTUK TABLET/DESKTOP --- */
+        @media (min-width: 600px) {
+            .form-row { flex-direction: row; }
+            .form-row input { flex: 1; }
+            .manual-form button { width: 100%; margin-top: 5px; }
+            .scan-card { flex-direction: row; justify-content: space-between; align-items: center; }
+            .scan-header { flex: 1; flex-direction: column; gap: 4px; }
+            .scan-actions { border-top: none; padding-top: 0; margin-top: 0; gap: 15px; }
+        }
     </style>
 </head>
 <body>
@@ -86,7 +113,7 @@
     <div id="login-section">
         <div class="login-box">
             <h2>CS77 Scanner</h2>
-            <p style="margin-bottom: 20px; font-size: 0.9rem; color: #666;">Silakan Login untuk Memulai</p>
+            <p>Silakan Login untuk Memulai</p>
             <div class="input-group">
                 <label>Nama Pengguna</label>
                 <input type="text" id="login-name" placeholder="Masukkan Nama Anda">
@@ -95,21 +122,21 @@
                 <label>NIK (Min 8 Karakter, ada Huruf, Angka & Unik)</label>
                 <input type="text" id="login-nik" placeholder="Contoh: CS77@2026">
             </div>
-            <button class="btn btn-primary" style="width:100%; margin-top: 10px;" onclick="login()">Masuk</button>
+            <button class="btn btn-primary" style="width:100%; margin-top: 15px; justify-content:center;" onclick="login()">Masuk Sistem</button>
         </div>
     </div>
 
     <!-- APP SECTION -->
     <div id="app-section">
         <!-- Navbar -->
-        <nav class="navbar" style="border-radius: 0 0 10px 10px; margin: -15px -15px 15px -15px;">
+        <nav class="navbar">
             <div class="logo-area">
                 <i class="fas fa-barcode"></i> CS77 Scanner
             </div>
             <div class="user-info">
-                <div id="display-name" style="font-weight: 600;"></div>
-                <div id="display-nik" style="color: #666;"></div>
-                <button onclick="logout()" style="background:none; border:none; color:#dc3545; font-size:0.8rem; cursor:pointer;">Logout</button>
+                <strong id="display-name"></strong>
+                <span id="display-nik" style="color: #666;"></span>
+                <button class="logout-btn" onclick="logout()">Logout</button>
             </div>
         </nav>
 
@@ -124,38 +151,28 @@
 
         <!-- Form Manual -->
         <div class="manual-form">
-            <h3><i class="fas fa-keyboard"></i> Input Manual (Produk Tidak Teregister)</h3>
-            <div class="row">
+            <h3><i class="fas fa-keyboard"></i> Input Manual (Produk Baru)</h3>
+            <div class="form-row">
                 <input type="text" id="manual-barcode" placeholder="Barcode">
-                <input type="text" id="manual-plu" placeholder="PLU">
+                <input type="text" id="manual-plu" placeholder="PLU (Opsional)">
             </div>
-            <div class="row">
+            <div class="form-row">
                 <input type="text" id="manual-desc" placeholder="Deskripsi Produk">
                 <input type="number" id="manual-qty" placeholder="Qty" value="1" min="1">
             </div>
             <button class="btn btn-warning" style="width: 100%;" onclick="addManualProduct()">Tambah Manual</button>
         </div>
 
-        <!-- Tabel Data -->
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>Barcode / PLU</th>
-                    <th>Deskripsi</th>
-                    <th>Qty</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody id="scan-results">
-                <!-- Data akan masuk di sini -->
-            </tbody>
-        </table>
+        <!-- List Data -->
+        <div id="scan-results" class="scan-list">
+            <!-- Data akan masuk di sini -->
+        </div>
 
         <!-- Export & Reset -->
         <div class="export-area">
-            <button class="btn btn-success" onclick="exportExcel()"><i class="fas fa-file-excel"></i> Export Excel</button>
-            <button class="btn btn-danger" onclick="exportPDF()"><i class="fas fa-file-pdf"></i> Export PDF</button>
-            <button class="btn btn-warning" onclick="resetData()"><i class="fas fa-trash"></i> Reset Data</button>
+            <button class="btn btn-success" onclick="exportExcel()"><i class="fas fa-file-excel"></i> Excel</button>
+            <button class="btn btn-danger" onclick="exportPDF()"><i class="fas fa-file-pdf"></i> PDF</button>
+            <button class="btn btn-outline" style="flex: 1 1 100%;" onclick="resetData()"><i class="fas fa-trash"></i> Reset Data</button>
         </div>
 
         <!-- Footer -->
@@ -169,43 +186,33 @@
                 <a href="https://www.tiktok.com/@selarasdirumah" target="_blank" class="social-icon"><i class="fab fa-tiktok"></i></a>
             </div>
             <div class="footer-credits">
-                Handcrafted with ❤️ by <strong>Andrew Dwiranto</strong> (Cah_Sragen_77, Indonesia)<br>
-                <div style="margin-top: 5px; font-size: 0.75rem;">
-                    © 2026 Hak Cipta Dilindungi Undang-Undang<br>
-                    Didukung oleh Teknologi <strong>DeepSeek AI</strong> &copy; 2026
-                </div>
+                Handcrafted with ❤️ by <strong>Andrew Dwiranto</strong> (Cah_Sragen_77)<br>
+                <div style="margin-top: 5px; font-size: 0.7rem;">© 2026 Hak Cipta Dilindungi Undang-Undang</div>
+                <div class="deepseek-badge"><i class="fas fa-robot"></i> Didukung Teknologi DeepSeek AI &copy; 2026</div>
             </div>
         </footer>
     </div>
 
-    <!-- SCRIPT LOGIC -->
+    <!-- SCRIPT LOGIC (Sama seperti sebelumnya, hanya render yang diubah) -->
     <script>
-        // --- KONFIGURASI DATABASE (INDEXEDDB) ---
         const db = new Dexie('CS77ScannerDB');
         db.version(1).stores({
-            scans: '++id, plu, barcode, descp, qty, isManual', // Tabel Hasil Scan
-            master: 'plu, barcode, descp, kategori' // Tabel Data Master dari GitHub
+            scans: '++id, plu, barcode, descp, qty, isManual',
+            master: 'plu, barcode, descp, kategori'
         });
 
-        // --- VARIABEL GLOBAL ---
         let html5QrcodeScanner = null;
         let currentUser = { name: '', nik: '' };
         let isScanning = false;
         const MASTER_DATA_URL = "https://raw.githubusercontent.com/KhatwahAmam-Dev/entry_data/main/masterData.json";
 
-        // --- FUNGSI LOGIN ---
         function login() {
             const name = document.getElementById('login-name').value.trim();
             const nik = document.getElementById('login-nik').value.trim();
-            
-            // Validasi NIK: Min 8 char, ada huruf, angka, dan simbol
             const nikRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
             
             if (!name) { Swal.fire('Error', 'Nama Pengguna wajib diisi!', 'error'); return; }
-            if (!nikRegex.test(nik)) { 
-                Swal.fire('Error', 'NIK harus minimal 8 karakter, mengandung Huruf, Angka, dan Simbol unik (@$!%*#?&)', 'error'); 
-                return; 
-            }
+            if (!nikRegex.test(nik)) { Swal.fire('Error', 'NIK minimal 8 karakter, kombinasi Huruf, Angka, dan Simbol (@$!%*#?&)', 'error'); return; }
 
             currentUser = { name, nik };
             document.getElementById('login-section').style.display = 'none';
@@ -213,29 +220,24 @@
             document.getElementById('display-name').innerText = name;
             document.getElementById('display-nik').innerText = `NIK: ${nik}`;
             
-            loadData(); // Load data dari DB
-            syncMasterData(); // Ambil data dari GitHub
+            loadData();
+            syncMasterData();
         }
 
-        function logout() {
-            location.reload();
-        }
+        function logout() { location.reload(); }
 
-        // --- FUNGSI SINKRONISASI DATA MASTER (GITHUB) ---
         async function syncMasterData() {
             try {
                 const response = await fetch(MASTER_DATA_URL);
                 const masterData = await response.json();
-                // Simpan ke IndexedDB
                 await db.master.clear();
                 await db.master.bulkPut(masterData);
                 console.log('Data Master berhasil disinkronkan:', masterData.length, 'items');
             } catch (error) {
-                console.warn('Gagal sinkronisasi (Mungkin Offline). Menggunakan data cache.');
+                console.warn('Gagal sinkronisasi (Offline). Menggunakan cache.');
             }
         }
 
-        // --- FUNGSI KAMERA ---
         function startCamera() {
             if (isScanning) return;
             html5QrcodeScanner = new Html5Qrcode("reader");
@@ -246,7 +248,7 @@
             ).then(() => {
                 isScanning = true;
                 document.getElementById('btn-start').style.display = 'none';
-                document.getElementById('btn-stop').style.display = 'block';
+                document.getElementById('btn-stop').style.display = 'flex';
             }).catch(err => {
                 Swal.fire('Error', 'Gagal mengakses kamera: ' + err, 'error');
             });
@@ -256,15 +258,13 @@
             if (html5QrcodeScanner && isScanning) {
                 html5QrcodeScanner.stop().then(() => {
                     isScanning = false;
-                    document.getElementById('btn-start').style.display = 'block';
+                    document.getElementById('btn-start').style.display = 'flex';
                     document.getElementById('btn-stop').style.display = 'none';
                 });
             }
         }
 
-        // --- FUNGSI SCAN BERHASIL ---
-        async function onScanSuccess(decodedText, decodedResult) {
-            // Cari produk di data master berdasarkan barcode atau PLU
+        async function onScanSuccess(decodedText) {
             let product = await db.master.where('barcode').equals(decodedText).first();
             if (!product) {
                 product = await db.master.where('plu').equals(decodedText).first();
@@ -273,24 +273,21 @@
             if (product) {
                 await handleProductScan(product.plu, product.barcode, product.descp);
             } else {
-                Swal.fire('Info', `Barcode/PLU: ${decodedText} tidak ditemukan di Master Data. Silakan input manual.`, 'info');
+                Swal.fire('Info', `Barcode/PLU: ${decodedText} tidak ditemukan. Silakan input manual.`, 'info');
             }
         }
 
-        // --- FUNGSI HANDLE SCAN (CEK DUPLIKAT) ---
         async function handleProductScan(plu, barcode, descp) {
-            // Cek apakah produk sudah ada di tabel scans
             const existing = await db.scans.where('plu').equals(plu).first();
 
             if (existing) {
-                // Jika ada, tanya user
                 const result = await Swal.fire({
                     title: 'Produk Sudah Ada!',
-                    text: `Produk "${descp}" sudah discan dengan Qty: ${existing.qty}. Tambahkan Qty?`,
+                    text: `"${descp}" sudah discan (Qty: ${existing.qty}). Tambahkan Qty?`,
                     icon: 'question',
                     showCancelButton: true,
                     confirmButtonText: 'Ya, Tambah',
-                    cancelButtonText: 'Tidak, Biarkan'
+                    cancelButtonText: 'Tidak'
                 });
 
                 if (result.isConfirmed) {
@@ -298,16 +295,13 @@
                     await db.scans.put(existing);
                 }
             } else {
-                // Jika belum ada, insert baru
                 await db.scans.add({ plu, barcode, descp, qty: 1, isManual: false });
             }
             
-            loadData(); // Refresh tabel
-            // Getar sebagai feedback
+            loadData();
             if (navigator.vibrate) navigator.vibrate(100);
         }
 
-        // --- FUNGSI INPUT MANUAL ---
         async function addManualProduct() {
             const barcode = document.getElementById('manual-barcode').value.trim();
             const plu = document.getElementById('manual-plu').value.trim();
@@ -315,16 +309,11 @@
             const qty = parseInt(document.getElementById('manual-qty').value) || 1;
 
             if (!barcode || !desc) {
-                Swal.fire('Error', 'Barcode dan Deskripsi wajib diisi!', 'error');
-                return;
+                Swal.fire('Error', 'Barcode dan Deskripsi wajib diisi!', 'error'); return;
             }
 
             await db.scans.add({
-                plu: plu || barcode,
-                barcode: barcode,
-                descp: desc,
-                qty: qty,
-                isManual: true
+                plu: plu || barcode, barcode: barcode, descp: desc, qty: qty, isManual: true
             });
 
             document.getElementById('manual-barcode').value = '';
@@ -336,50 +325,48 @@
             Swal.fire('Sukses', 'Produk manual ditambahkan', 'success');
         }
 
-        // --- FUNGSI RENDER TABEL ---
+        // --- FUNGSI RENDER TABEL (VERSI CARD MOBILE) ---
         async function loadData() {
             const scans = await db.scans.toArray();
-            const tbody = document.getElementById('scan-results');
-            tbody.innerHTML = '';
+            const container = document.getElementById('scan-results');
+            container.innerHTML = '';
 
             if (scans.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#999;">Belum ada data scan</td></tr>';
+                container.innerHTML = '<div style="text-align:center; color:#999; padding: 20px; font-size: 0.9rem;">Belum ada data scan</div>';
                 return;
             }
 
             scans.forEach(item => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>
-                        ${item.barcode}<br>
-                        <small style="color: #666;">PLU: ${item.plu}</small>
-                    </td>
-                    <td>${item.descp} ${item.isManual ? '<br><small style="color:#ff7f00;">(Manual)</small>' : ''}</td>
-                    <td>
-                        <input type="number" class="qty-input" value="${item.qty}" min="1" onchange="updateQty(${item.id}, this.value)">
-                    </td>
-                    <td>
+                const card = document.createElement('div');
+                card.className = 'scan-card';
+                card.innerHTML = `
+                    <div class="scan-header">
+                        <div style="flex:1;">
+                            <div class="scan-title">${item.descp} ${item.isManual ? '<span style="color:#ff7f00; font-size:0.7rem;">(Manual)</span>' : ''}</div>
+                            <div class="scan-sub">Barcode: ${item.barcode} | PLU: ${item.plu}</div>
+                        </div>
+                    </div>
+                    <div class="scan-actions">
+                        <div class="qty-wrapper">
+                            <span style="font-size:0.75rem; color:#777;">Qty:</span>
+                            <input type="number" class="qty-input" value="${item.qty}" min="1" onchange="updateQty(${item.id}, this.value)">
+                        </div>
                         <button class="btn-delete" onclick="deleteItem(${item.id})"><i class="fas fa-trash"></i></button>
-                    </td>
+                    </div>
                 `;
-                tbody.appendChild(tr);
+                container.appendChild(card);
             });
         }
 
-        // --- FUNGSI EDIT QTY MANUAL ---
         async function updateQty(id, newQty) {
             const qty = parseInt(newQty) || 1;
             await db.scans.update(id, { qty: qty });
         }
 
-        // --- FUNGSI HAPUS ITEM ---
         async function deleteItem(id) {
             const result = await Swal.fire({
-                title: 'Hapus Data?',
-                text: "Data ini akan dihapus dari daftar.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Ya, Hapus'
+                title: 'Hapus Data?', text: "Data ini akan dihapus.", icon: 'warning',
+                showCancelButton: true, confirmButtonText: 'Ya, Hapus'
             });
             if (result.isConfirmed) {
                 await db.scans.delete(id);
@@ -387,14 +374,10 @@
             }
         }
 
-        // --- FUNGSI RESET DATA ---
         async function resetData() {
             const result = await Swal.fire({
-                title: 'Reset Semua Data?',
-                text: "Semua data scan akan dihapus permanen!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Ya, Reset'
+                title: 'Reset Semua Data?', text: "Semua data scan akan dihapus permanen!", icon: 'warning',
+                showCancelButton: true, confirmButtonText: 'Ya, Reset'
             });
             if (result.isConfirmed) {
                 await db.scans.clear();
@@ -403,25 +386,15 @@
             }
         }
 
-        // --- FUNGSI EXPORT EXCEL ---
         async function exportExcel() {
             const scans = await db.scans.toArray();
-            if (scans.length === 0) { Swal.fire('Info', 'Tidak ada data untuk diexport', 'info'); return; }
+            if (scans.length === 0) { Swal.fire('Info', 'Tidak ada data', 'info'); return; }
 
             const data = scans.map(item => ({
-                'kd_store': 'DCA03', // Sesuaikan dengan default
-                'plu': item.plu,
-                'descp': item.descp,
-                's_descp': item.descp,
-                'barcode': item.barcode,
-                'divisi': '-',
-                'dept': '-',
-                'kategori': '-',
-                'satuan': 'PCS',
-                'on_hand': item.qty,
-                'user_id': currentUser.name,
-                'nik': currentUser.nik,
-                'tgl_input': new Date().toLocaleDateString('id-ID')
+                'kd_store': 'DCA03', 'plu': item.plu, 'descp': item.descp, 's_descp': item.descp,
+                'barcode': item.barcode, 'divisi': '-', 'dept': '-', 'kategori': '-',
+                'satuan': 'PCS', 'on_hand': item.qty, 'user_id': currentUser.name,
+                'nik': currentUser.nik, 'tgl_input': new Date().toLocaleDateString('id-ID')
             }));
 
             const ws = XLSX.utils.json_to_sheet(data);
@@ -430,65 +403,40 @@
             XLSX.writeFile(wb, `CS77_Scan_${new Date().getTime()}.xlsx`);
         }
 
-        // --- FUNGSI EXPORT PDF (DENGAN BARCODE VISUAL) ---
         async function exportPDF() {
             const scans = await db.scans.toArray();
-            if (scans.length === 0) { Swal.fire('Info', 'Tidak ada data untuk diexport', 'info'); return; }
+            if (scans.length === 0) { Swal.fire('Info', 'Tidak ada data', 'info'); return; }
 
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-
-            // Header PDF
-            doc.setFontSize(16);
+            doc.setFontSize(14);
             doc.text("Laporan Stock Opname - CS77 Scanner", 14, 15);
-            doc.setFontSize(10);
+            doc.setFontSize(9);
             doc.text(`Tanggal: ${new Date().toLocaleString('id-ID')}`, 14, 22);
-            doc.text(`User: ${currentUser.name} | NIK: ${currentUser.nik}`, 14, 28);
+            doc.text(`User: ${currentUser.name} | NIK: ${currentUser.nik}`, 14, 27);
 
             let yPos = 35;
-
-            // Looping data scan
             for (let i = 0; i < scans.length; i++) {
                 const item = scans[i];
+                if (yPos > 250) { doc.addPage(); yPos = 20; }
 
-                // Cek halaman penuh
-                if (yPos > 250) {
-                    doc.addPage();
-                    yPos = 20;
-                }
-
-                // Tulis Teks
-                doc.setFontSize(10);
-                doc.text(`PLU: ${item.plu}`, 14, yPos);
+                doc.setFontSize(9);
+                doc.text(`PLU: ${item.plu} | Qty: ${item.qty} PCS`, 14, yPos);
                 doc.text(`Deskripsi: ${item.descp}`, 14, yPos + 5);
                 doc.text(`Barcode: ${item.barcode}`, 14, yPos + 10);
-                doc.text(`Qty: ${item.qty} PCS`, 14, yPos + 15);
 
-                // Buat Barcode Visual menggunakan JsBarcode di Canvas
                 const canvas = document.createElement('canvas');
                 try {
-                    JsBarcode(canvas, item.barcode, {
-                        format: "CODE128",
-                        width: 2,
-                        height: 40,
-                        displayValue: false
-                    });
-                    // Tambahkan gambar barcode ke PDF
-                    const imgData = canvas.toDataURL("image/png");
-                    doc.addImage(imgData, 'PNG', 14, yPos + 18, 50, 15);
-                } catch (e) {
-                    doc.text("[Barcode Error]", 14, yPos + 18);
-                }
+                    JsBarcode(canvas, item.barcode, { format: "CODE128", width: 1.5, height: 30, displayValue: false });
+                    doc.addImage(canvas.toDataURL("image/png"), 'PNG', 14, yPos + 13, 40, 12);
+                } catch (e) {}
 
-                // Garis pemisah
                 doc.setLineWidth(0.1);
-                doc.line(14, yPos + 36, 196, yPos + 36);
-                yPos += 40;
+                doc.line(14, yPos + 28, 196, yPos + 28);
+                yPos += 32;
             }
-
             doc.save(`CS77_Laporan_${new Date().getTime()}.pdf`);
         }
-
     </script>
 </body>
 </html>
